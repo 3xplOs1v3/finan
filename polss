@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Mar  7 01:44:47 2021
+
+@author: sk
+"""
+
+import numpy as np
+import pandas as pd
+
+from scipy import stats
+import statsmodels.api as sm
+
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.linear_model import LinearRegression
+
+from sympy import *
+
+
+
+data = pd.read_excel('/home/sk/Desktop/uned/flush/exam/2/Housing.xlsx')
+
+X = data['House Size (sq.ft.)']
+Y = data['House Price']
+
+plt.scatter(X,Y)
+plt.axis([0, 2500, 0, 1500000])
+plt.xlabel("House size")
+plt.ylabel("House price")
+plt.show()
+
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, random_state = 0)
+
+
+X_train = np.array(X_train).reshape(-1,1)
+Y_train = np.array(Y_train).reshape(-1,1)
+X_test = np.array(X_test).reshape(-1,1)
+Y_test = np.array(Y_test).reshape(-1,1)
+
+
+linregression = LinearRegression()
+linregression.fit(X_train, Y_train)
+
+
+Y_pred = linregression.predict(X_test)
+
+linregression.intercept_
+
+linregression.coef_
+
+
+plt.scatter(X_train, Y_train)
+plt.plot(X_train, linregression.predict(X_train), 'r')
+plt.show()
+
+
+def grado(n, xk, yk):
+    x = Symbol('x')
+    H = []
+    [H.append(xk**i) for i in range(n)]
+    H = np.array(H).reshape(n, len(xk))
+    return (np.linalg.inv((H.dot(H.transpose())))).dot((H).dot(yk))
+    
